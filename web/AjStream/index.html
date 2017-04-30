@@ -4,12 +4,27 @@
 </head>
 <body>
     <h1>Audio Stream utils</h1>
+    </br>
     <button id="startB">Start</button>
     <button id="stopB">Stop</button>
     <div>
         <audio id="ainB" controls muted ></audio>
         <audio id="aoutB" controls></audio>
     </div>
+    <div>
+        <p> Microphone Level</p><select id="inSel">
+            <option value="1">1 </option>
+            <option value="0.6">0.6</option>
+            <option value="0.3">0.3</option>
+            <option value="0">0 </option>
+            </select>
+        <p> Speaker Level</p><select id="outSel">
+            <option value="1">1</option>
+            <option value="0.6">0.6</option>
+            <option value="0.3">0.3</option>
+            <option value="0">0</option>
+            </select>
+     </div>
 </body>
 <script src="AjStream.js"></script>
 </html>
