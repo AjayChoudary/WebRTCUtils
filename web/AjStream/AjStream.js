@@ -7,12 +7,12 @@ var constraints = {
   video: false
 };
 var audioStream, audioOutStream;
-var audioIn = document.querySelector('audio#ainB');
-var audioOut = document.querySelector('audio#aoutB');
-var inputLevelSelector = document.querySelector('select#inSel');
-var outputLevelSelector = document.querySelector('select#outSel');
-var startB = document.querySelector('button#startB');
-var stopB = document.querySelector('button#stopB');
+var audioIn = document.getElementById('ainB');
+var audioOut = document.getElementById('aoutB');
+var inputLevelSelector = document.getElementById('inSel');
+var outputLevelSelector = document.getElementById('outSel');
+var startB = document.getElementById('startB');
+var stopB = document.getElementById('stopB');
 inputLevelSelector.addEventListener('change', changeMicrophoneLevel);
 outputLevelSelector.addEventListener('change', changeSpeakerLevel);
 

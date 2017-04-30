@@ -7,24 +7,38 @@
     </br>
     <button id="startB">Start</button>
     <button id="stopB">Stop</button>
+    </br>
+    <div>
+        <table><tbody>
+           <tr>
+            <th style="padding-right:10px;"> Microphone Level</th>
+  		    <th style="padding-left:10px;"> Speaker Level</th>
+           </tr>
+           <tr>
+            <th><select id="inSel">
+                <option value="1">1 </option>
+                <option value="1.5">1.5</option>
+                <option value="2">2 </option>
+                <option value="0.6">0.6</option>
+                <option value="0.3">0.3</option>
+                <option value="0">0 </option>
+              </select>
+            </th>
+            <th><select id="outSel">
+                <option value="1">1</option>
+                <option value="0.6">0.5</option>
+                <option value="0.3">0.3</option>
+                <option value="0">0</option>
+                </select>
+            </th>
+           </tr>
+        </tbody></table>
+    </div>
+    </br>
     <div>
         <audio id="ainB" controls muted ></audio>
-        <audio id="aoutB" controls></audio>
+        <audio id="aoutB" controls autoplay></audio>
     </div>
-    <div>
-        <p> Microphone Level</p><select id="inSel">
-            <option value="1">1 </option>
-            <option value="0.6">0.6</option>
-            <option value="0.3">0.3</option>
-            <option value="0">0 </option>
-            </select>
-        <p> Speaker Level</p><select id="outSel">
-            <option value="1">1</option>
-            <option value="0.6">0.6</option>
-            <option value="0.3">0.3</option>
-            <option value="0">0</option>
-            </select>
-     </div>
 </body>
 <script src="AjStream.js"></script>
 </html>
