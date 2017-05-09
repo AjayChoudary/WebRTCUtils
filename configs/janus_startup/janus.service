@@ -1,0 +1,24 @@
+# The Janus Media Server Autostart script on boot with systemd
+# Targeted for systemd on Ubuntu > 16.04
+# --Ajay
+
+
+[Unit]
+Description=Janus WebRTC Media Server
+After=network.target
+
+[Service]
+Type=forking #Enable only if your janus running in Daemon mode 
+ExecStartPre=/bin/echo "Upstart About to start the janus `date` " >> /var/log/janus_startup.log
+ExecStart=/opt/janus/bin/janus
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-abnormal
+LimitNOFILE=65536
+GuessMainPID=yes
+PIDFile=/var/run/janus.pid
+RestartPreventExitStatus=255
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
+
