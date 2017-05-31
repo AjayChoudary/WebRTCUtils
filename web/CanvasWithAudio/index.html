@@ -1,0 +1,116 @@
+<!-- WebRTC Canvas + Audio Recording Demo -Ajay -->
+<!DOCTYPE html>
+<html>
+<head>
+<title> WebRTC Canvas + Audio Recording Demo </title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style>
+
+html * {
+ font-family: "Lato", sans-serif;
+}
+</style>
+<script>
+
+var isSecure = location.protocol === 'https:' ;
+var localVideo, recvideo, canvas, recordedBlobs, mediaRecorder;
+
+if (!isSecure) {
+	// HTTPS is mandatory -Ajay
+	location.protocol = 'HTTPS';
+}
+var constraints = {
+  audio: true,
+  video: true
+};
+function onloading() {
+	localVideo = document.getElementById('livevideo');
+	canvas = document.getElementById('canvasvideo');
+	recvideo = document.getElementById('recvideo');
+	navigator.mediaDevices.getUserMedia(constraints).
+	then(function(stream){
+		window.stream = stream;
+		localVideo.srcObject = stream;
+  		setTimeout(poll, 1000);
+	}).catch(function(e){
+		console.error('Exception in GUM', e);
+	});
+}
+function poll () {
+  var w = localVideo.videoWidth;
+  var h = localVideo.videoHeight;
+  canvas.width  = w;
+  canvas.height = h;
+  var ctx = canvas.getContext('2d');
+  ctx.drawImage(localVideo, 0, 0, w, h);
+  setTimeout(poll, 300);
+}
+function record() {
+	var options = {mimeType: 'video/webm'};
+	recordedBlobs = [];
+	window.recStream = new MediaStream();
+	window.recStream.addTrack(window.stream.getAudioTracks()[0]);
+	window.recStream.addTrack(window.canvasStream.getVideoTracks()[0]);
+	console.dir(window.recStream);
+	mediaRecorder = new MediaRecorder(recStream, options);
+	mediaRecorder.ondataavailable = function (event) {
+		if (event.data && event.data.size > 0) {
+  	  		recordedBlobs.push(event.data);
+  		}
+	}
+	mediaRecorder.start(100); 
+}
+function Start() {
+	document.getElementById("start").disabled = true;
+	document.getElementById("stop").disabled = false;
+	window.canvasStream = canvas.captureStream();
+	record();	
+}
+function Stop() {
+	document.getElementById("start").disabled = false;
+	document.getElementById("stop").disabled = true;
+	document.getElementById("play").disabled = false;
+	document.getElementById("down").disabled = false;
+	if(mediaRecorder)
+		mediaRecorder.stop();
+	mediaRecorder = undefined;
+}
+function Play() {
+	var superBuffer = new Blob(recordedBlobs, {type: 'video/webm'});
+	recvideo.src = window.URL.createObjectURL(superBuffer);
+}
+function Download() {
+	var blob = new Blob(recordedBlobs, {type: 'video/webm'});
+	var url = window.URL.createObjectURL(blob);
+	var a = document.createElement('a');
+	a.style.display = 'none';
+	a.href = url;
+	a.download = 'canvaWithAudio.webm';
+	document.body.appendChild(a);
+	a.click();
+	setTimeout(function() {
+	  document.body.removeChild(a);
+	  window.URL.revokeObjectURL(url);
+	}, 100);
+}
+
+</script>
+</head>
+<body onload="onloading()">
+<button id="start" onclick="Start()">Start</button>
+<button id="stop" onclick="Stop()" disabled="">Stop</button>
+<button id="play" onclick="Play()" disabled="">Play</button>
+<button id="down" onclick="Download()" disabled="">Download</button>
+
+<div id="container" style="float:left; width: 94%;">
+	<br/>
+	<video id="livevideo" muted autoplay style="float:left; width: 45%"></video>
+	<canvas id="canvasvideo" style="float:left; width: 45%"></canvas>
+	<br/>
+	<video id="recvideo" autoplay style="float:left; width: 50%"></video>
+</div>
+</body>
+
+</html>
